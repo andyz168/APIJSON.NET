@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UserSecretsId>801d0f5b-e25d-416a-999f-0a82f7674301</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

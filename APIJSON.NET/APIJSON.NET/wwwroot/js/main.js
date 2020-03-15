@@ -22,74 +22,74 @@
     template: '#val-template'
   })
 
-  Vue.use({
-    install: function (Vue, options) {
-      
-      // 判断数据类型
-      Vue.prototype.getTyp = function (val) {
-        return toString.call(val).split(']')[0].split(' ')[1]
-      }
+    Vue.use({
+        install: function (Vue, options) {
 
-      // 判断是否是对象或者数组，以对下级进行渲染
-      Vue.prototype.isObjectArr = function (val) {
-        return ['Object', 'Array'].indexOf(this.getTyp(val)) > -1
-      }
+            // 判断数据类型
+            Vue.prototype.getTyp = function (val) {
+                return toString.call(val).split(']')[0].split(' ')[1]
+            }
 
-      // 折叠
-      Vue.prototype.fold = function ($event) {
-        var target = Vue.prototype.expandTarget($event)
-        target.siblings('svg').show()
-        target.hide().parent().siblings('.expand-view').hide()
-        target.parent().siblings('.fold-view').show()
-      }
-      // 展开
-      Vue.prototype.expand = function ($event) {
-        var target = Vue.prototype.expandTarget($event)
-        target.siblings('svg').show()
-        target.hide().parent().siblings('.expand-view').show()
-        target.parent().siblings('.fold-view').hide()
-      }
+            // 判断是否是对象或者数组，以对下级进行渲染
+            Vue.prototype.isObjectArr = function (val) {
+                return ['Object', 'Array'].indexOf(this.getTyp(val)) > -1
+            }
 
-      //获取展开折叠的target
-      Vue.prototype.expandTarget = function ($event) {
-        switch($event.target.tagName.toLowerCase()) {
-          case 'use':
-            return $($event.target).parent()
-          case 'label':
-            return $($event.target).closest('.fold-view').siblings('.expand-wraper').find('.icon-square-plus').first()
-          default:
-            return $($event.target)
+            // 折叠
+            Vue.prototype.fold = function ($event) {
+                var target = Vue.prototype.expandTarget($event)
+                target.siblings('svg').show()
+                target.hide().parent().siblings('.expand-view').hide()
+                target.parent().siblings('.fold-view').show()
+            }
+            // 展开
+            Vue.prototype.expand = function ($event) {
+                var target = Vue.prototype.expandTarget($event)
+                target.siblings('svg').show()
+                target.hide().parent().siblings('.expand-view').show()
+                target.parent().siblings('.fold-view').hide()
+            }
+
+            //获取展开折叠的target
+            Vue.prototype.expandTarget = function ($event) {
+                switch ($event.target.tagName.toLowerCase()) {
+                    case 'use':
+                        return $($event.target).parent()
+                    case 'label':
+                        return $($event.target).closest('.fold-view').siblings('.expand-wraper').find('.icon-square-plus').first()
+                    default:
+                        return $($event.target)
+                }
+            }
+
+            // 格式化值
+            Vue.prototype.formatVal = function (val) {
+                switch (Vue.prototype.getTyp(val)) {
+                    case 'String':
+                        return '"' + val + '"';
+                        break;
+
+                    case 'Null':
+                        return 'null';
+                        break;
+
+                    default:
+                        return val;
+
+                }
+            };
+
+            // 判断值是否是链接
+            Vue.prototype.isaLink = function (val) {
+                return /^((https|http|ftp|rtsp|mms)?:\/\/)[^\s]+/.test(val)
+            };
+
+            // 计算对象的长度
+            Vue.prototype.objLength = function (obj) {
+                return Object.keys(obj).length
+            };
         }
-      }
-
-      // 格式化值
-      Vue.prototype.formatVal = function (val) { 
-        switch(Vue.prototype.getTyp(val)) {
-          case 'String':
-            return '"' + val + '"'
-            break
-
-          case 'Null': 
-            return 'null'
-            break
-
-          default:
-            return val
-
-        }
-      }
-
-      // 判断值是否是链接
-      Vue.prototype.isaLink = function (val) {
-        return /^((https|http|ftp|rtsp|mms)?:\/\/)[^\s]+/.test(val)
-      }
-
-      // 计算对象的长度
-      Vue.prototype.objLength = function (obj) { 
-        return Object.keys(obj).length
-      }
-    }
-  })
+    });
 
     var initJson = {
         "[]": {
@@ -160,104 +160,104 @@
           },
       // 全部展开
       expandAll: function () {
-        $('.icon-square-min').show()
-        $('.icon-square-plus').hide()
-        $('.expand-view').show()
-        $('.fold-view').hide()
+          $('.icon-square-min').show();
+          $('.icon-square-plus').hide();
+          $('.expand-view').show();
+          $('.fold-view').hide();
       },
 
       // 全部折叠
       collapseAll: function () {
-        $('.icon-square-min').hide()
-        $('.icon-square-plus').show()
-        $('.expand-view').hide()
-        $('.fold-view').show()
+          $('.icon-square-min').hide();
+          $('.icon-square-plus').show();
+          $('.expand-view').hide();
+          $('.fold-view').show();
       },
 
       // 压缩
       compress: function () {
-        App.jsoncon = Parse.compress(App.jsoncon)
+          App.jsoncon = Parse.compress(App.jsoncon);
       },
 
       // diff
       diffTwo: function () {
-        var oldJSON = {}
-        var newJSON = {}
-        App.view = 'code'
+          var oldJSON = {};
+          var newJSON = {};
+          App.view = 'code';
         try {
           oldJSON = jsonlint.parse(App.jsoncon)
         } catch (ex) {
-          App.view = 'error'
-          App.error = {
-            msg: '原 JSON 解析错误\r\n' + ex.message
-          }
-          return
+            App.view = 'error';
+            App.error = {
+                msg: '原 JSON 解析错误\r\n' + ex.message
+            };
+            return;
         }
 
         try {
-          newJSON = jsonlint.parse(App.newjsoncon)
+            newJSON = jsonlint.parse(App.newjsoncon);
         } catch (ex) {
-          App.view = 'error'
-          App.error = {
-            msg: '新 JSON 解析错误\r\n' + ex.message
-          }
-          return
+            App.view = 'error';
+            App.error = {
+                msg: '新 JSON 解析错误\r\n' + ex.message
+            };
+            return;
         }
 
         var base = difflib.stringAsLines(JSON.stringify(oldJSON, '', 4))
         var newtxt = difflib.stringAsLines(JSON.stringify(newJSON, '', 4))
         var sm = new difflib.SequenceMatcher(base, newtxt)
         var opcodes = sm.get_opcodes()
-        $('#diffoutput').empty().append(diffview.buildView({
-          baseTextLines: base,
-          newTextLines: newtxt,
-          opcodes: opcodes,
-          baseTextName: '原 JSON',
-          newTextName: '新 JSON',
-          contextSize: 2,
-          viewType: 0
-        }))
+          $('#diffoutput').empty().append(diffview.buildView({
+              baseTextLines: base,
+              newTextLines: newtxt,
+              opcodes: opcodes,
+              baseTextName: '原 JSON',
+              newTextName: '新 JSON',
+              contextSize: 2,
+              viewType: 0
+          }));
       },
 
       // 清空
       clearAll: function () {
-        App.jsoncon = ''
+          App.jsoncon = '';
       },
 
       // 美化
       beauty: function () {
-        App.jsoncon = JSON.stringify(JSON.parse(App.jsoncon), '', 4)
+          App.jsoncon = JSON.stringify(JSON.parse(App.jsoncon), '', 4);
       },
 
       baseViewToDiff: function () {
-        App.baseview = 'diff'
-        App.diffTwo()
+          App.baseview = 'diff';
+          App.diffTwo();
       },
 
       // 回到格式化视图
       baseViewToFormater: function () {
-        App.baseview = 'formater'
-        App.view = 'code'
-        App.showJsonView()
+          App.baseview = 'formater';
+          App.view = 'code';
+          App.showJsonView();
       },
 
       // 根据json内容变化格式化视图
       showJsonView: function () {
         if (App.baseview === 'diff') {
-          return
+            return;
         }
         try {
           if (this.jsoncon.trim() === '') {
-            App.view = 'empty'
-          } else {
-            App.view = 'code'
-            App.jsonhtml = jsonlint.parse(this.jsoncon)
+              App.view = 'empty';
+          } else {;
+              App.view = 'code';
+              App.jsonhtml = jsonlint.parse(this.jsoncon);
           }
         } catch (ex) {
-          App.view = 'error'
-          App.error = {
-            msg: ex.message
-          }
+            App.view = 'error';
+            App.error = {
+                msg: ex.message
+            };
         }
       },
 
@@ -265,19 +265,19 @@
       save: function () {
         if (App.history.name.trim() === '') {
           Helper.alert('名称不能为空！', 'danger')
-          return
+            return;
         }
-        var val = {
-          name: App.history.name,
-          data: App.jsoncon
-        }
-        var key = String(Date.now())
-        localforage.setItem(key, val, function (err, value) {
-          Helper.alert('保存成功！', 'success')
-          App.isSaveShow = false
-          val.key = key
-          App.historys.push(val)
-        })
+          var val = {
+              name: App.history.name,
+              data: App.jsoncon
+          };
+          var key = String(Date.now());
+          localforage.setItem(key, val, function (err, value) {
+              Helper.alert('保存成功！', 'success');
+              App.isSaveShow = false;
+              val.key = key;
+              App.historys.push(val);
+          });
       },
 
       // 删除已保存的
@@ -321,31 +321,31 @@
       },
 
       // 获取分享的链接
-      shareUrl: function (key) {
-        return `${window.location.origin}?key=${key}`
+          shareUrl: function (key) {
+              console.log(window.location.origin);
+              return `${window.location.origin}?key=${key}`;
       },
 
       // 分享
       share: function () {
-        let con = App.jsoncon
+          let con = App.jsoncon;
         if (con.trim() === '') {
-          return
+            return;
         }
-        App.isSharing = true
-        $.ajax({
-          type: 'POST',
-          url: `${ApiUrl}/json`,
-          contentType: 'application/json; charset=utf-8',
-          data: JSON.stringify({con: con, key: App.shareKey}),
-          success: (data) => {
-            App.isSharing = false
-            App.shareKey = uuidv1()
-            if (data.status) {
-              Helper.alert('分享成功，已将链接复制到剪贴板，只能保存24小时', 'success')
-            } else {
-            }
-          }
-        })
+          App.isSharing = true;
+          $.ajax({
+              type: 'POST',
+              url: `${ApiUrl}/json`,
+              contentType: 'application/json; charset=utf-8',
+              data: JSON.stringify({ con: con, key: App.shareKey }),
+              success: (data) => {
+                  App.isSharing = false;
+                  App.shareKey = uuidv1();
+                  if (data.status) {
+                      Helper.alert('分享成功，已将链接复制到剪贴板，只能保存24小时', 'success');
+                  }
+              }
+          });
       }
     },
     watch: {
