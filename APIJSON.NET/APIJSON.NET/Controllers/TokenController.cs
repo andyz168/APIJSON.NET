@@ -30,7 +30,7 @@ namespace APIJSON.NET.Controllers
         }
         [HttpPost("/token")]
         [AllowAnonymous]
-        public ActionResult Create([FromBody]TokenInput input)
+        public async Task< ActionResult> Create([FromBody]TokenInput input)
         {
             JObject ht = new JObject();
             ht.Add("code", "200");

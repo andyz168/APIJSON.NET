@@ -99,7 +99,7 @@
         /// <param name="json"></param>
         /// <returns></returns>
         [HttpPost("/add")]
-        public ActionResult Add([FromBody]JObject jobject)
+        public async  Task<ActionResult> Add([FromBody]JObject jobject)
         {
 
             JObject ht = new JObject();
@@ -107,9 +107,6 @@
             ht.Add("msg", "success");
             try
             {
-
-
-
                 foreach (var item in jobject)
                 {
                     string key = item.Key.Trim();
